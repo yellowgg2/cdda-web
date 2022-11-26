@@ -24,6 +24,8 @@
 #   Run: make NATIVE=osx OSX_MIN=10.12
 #     It is highly recommended to supply OSX_MIN > 10.11
 #     otherwise optimizations are automatically disabled with -O0
+# Emscripten
+#   Run: make NATIVE=emscripten
 
 # Build types:
 # Debug (no optimizations)
@@ -111,7 +113,7 @@ WARNINGS = \
   -Wzero-as-null-pointer-constant \
   -Wno-unknown-warning-option
 # Uncomment below to disable warnings
-#WARNINGS = -w
+WARNINGS = -w
 DEBUGSYMS = -g
 #PROFILE = -pg
 #OTHERS = -O3
@@ -588,6 +590,14 @@ ifeq ($(NATIVE), cygwin)
   TARGETSYSTEM=CYGWIN
 endif
 
+# Cygwin
+ifeq ($(NATIVE), emscripten)
+  CXX=emcc
+  LD=emcc
+  CXXFLAGS += -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_TTF=2
+  LDFLAGS += -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_TTF=2 --preload-file data -sEXPORTED_RUNTIME_METHODS=['FS']
+endif
+
 # MXE cross-compile to win32
 ifneq (,$(findstring mingw32,$(CROSS)))
   DEFINES += -DCROSS_LINUX
@@ -933,6 +943,16 @@ all: version $(CHECKS) $(TARGET) $(L10N) $(TESTS)
 
 $(TARGET): $(OBJS)
 	+$(LD) $(W32FLAGS) -o $(TARGET) $(OBJS) $(LDFLAGS)
+ifeq ($(RELEASE), 1)
+  ifndef DEBUG_SYMBOLS
+    ifneq ($(BACKTRACE),1)
+	$(STRIP) $(TARGET)
+    endif
+  endif
+endif
+
+cataclysm-tiles.html: $(OBJS)
+	+$(LD) $(W32FLAGS) -o cataclysm-tiles.html $(OBJS) $(LDFLAGS)
 ifeq ($(RELEASE), 1)
   ifndef DEBUG_SYMBOLS
     ifneq ($(BACKTRACE),1)
