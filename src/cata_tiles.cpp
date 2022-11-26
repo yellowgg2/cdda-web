@@ -286,11 +286,11 @@ tile_type &tileset::create_tile_type( const std::string &id, tile_type &&new_til
     return inserted_tile;
 }
 
-std::optional<std::runtime_error> cata_tiles::load_tileset( const std::string &tileset_id, const bool precheck,
+void cata_tiles::load_tileset( const std::string &tileset_id, const bool precheck,
                                const bool force, const bool pump_events )
 {
     if( tileset_ptr && tileset_ptr->get_tileset_id() == tileset_id && !force ) {
-        return std::nullopt;
+        return;
     }
     // TODO: move into clear or somewhere else.
     // reset the overlay ordering from the previous loaded tileset
@@ -300,16 +300,12 @@ std::optional<std::runtime_error> cata_tiles::load_tileset( const std::string &t
     // when the loading has succeeded.
     std::unique_ptr<tileset> new_tileset_ptr = std::make_unique<tileset>();
     tileset_loader loader( *new_tileset_ptr, renderer );
-    auto result = loader.load( tileset_id, precheck, /*pump_events=*/pump_events );
-    if (result) return result;
-
+    loader.load( tileset_id, precheck, /*pump_events=*/pump_events );
     tileset_ptr = std::move( new_tileset_ptr );
 
     set_draw_scale( 16 );
 
     minimap->set_type( tile_iso ? pixel_minimap_type::iso : pixel_minimap_type::ortho );
-
-    return std::nullopt;
 }
 
 void cata_tiles::reinit()
@@ -572,16 +568,12 @@ void cata_tiles::set_draw_scale( int scale )
     tile_ratioy = ( static_cast<float>( tile_height ) / static_cast<float>( fontheight ) );
 }
 
-#include <emscripten.h>
-
-std::optional<std::runtime_error> tileset_loader::load( const std::string &tileset_id, const bool precheck,
+void tileset_loader::load( const std::string &tileset_id, const bool precheck,
                            const bool pump_events )
 {
     std::string json_conf;
     std::string tileset_path;
     std::string tileset_root;
-
-    emscripten_run_script("console.log(Module.stackTrace());");
 
     const auto tset_iter = TILESETS.find( tileset_id );
     if( tset_iter != TILESETS.end() ) {
@@ -604,7 +596,7 @@ std::optional<std::runtime_error> tileset_loader::load( const std::string &tiles
     std::ifstream config_file( json_path.c_str(), std::ifstream::in | std::ifstream::binary );
 
     if( !config_file.good() ) {
-        return std::runtime_error( std::string( "Failed to open tile info json: " ) + json_path );
+        throw std::runtime_error( std::string( "Failed to open tile info json: " ) + json_path );
     }
 
     JsonIn config_json( config_file );
@@ -625,7 +617,7 @@ std::optional<std::runtime_error> tileset_loader::load( const std::string &tiles
 
     if( precheck ) {
         config.allow_omitted_members();
-        return std::nullopt;
+        return;
     }
 
     // Load tile information if available.
@@ -648,7 +640,7 @@ std::optional<std::runtime_error> tileset_loader::load( const std::string &tiles
                                        std::ifstream::binary );
 
         if( !mod_config_file.good() ) {
-            return std::runtime_error( std::string( "Failed to open tile info json: " ) +
+            throw std::runtime_error( std::string( "Failed to open tile info json: " ) +
                                       json_path );
         }
 
@@ -703,8 +695,6 @@ std::optional<std::runtime_error> tileset_loader::load( const std::string &tiles
     ensure_default_item_highlight();
 
     ts.tileset_id = tileset_id;
-
-    return std::nullopt;
 }
 
 void tileset_loader::load_internal( const JsonObject &config, const std::string &tileset_root,
