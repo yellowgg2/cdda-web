@@ -574,7 +574,7 @@ int main( int argc, const char *argv[] )
         exit( 1 );
     }
 
-    setupDebug( DebugOutput::file );
+    setupDebug( DebugOutput::std_err );
 
     /**
      * OS X does not populate locale env vars correctly (they usually default to

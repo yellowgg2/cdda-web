@@ -595,7 +595,8 @@ ifeq ($(NATIVE), emscripten)
   CXX=emcc
   LD=emcc
   CXXFLAGS += -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_TTF=2
-  LDFLAGS += -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_TTF=2 --preload-file data -sEXPORTED_RUNTIME_METHODS=['FS']
+  LDFLAGS += --preload-file data
+  LDFLAGS += -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_TTF=2 --bind -sALLOW_MEMORY_GROWTH -sEXPORTED_RUNTIME_METHODS=['FS']
 endif
 
 # MXE cross-compile to win32
