@@ -547,6 +547,8 @@ int main( int argc, const char *argv[] )
 
 #if defined(__ANDROID__)
     PATH_INFO::init_user_dir( external_storage_path );
+#elif defined(EMSCRIPTEN)
+    PATH_INFO::init_user_dir("/user");
 #else
 #   if defined(USE_HOME_DIR) || defined(USE_XDG_DIR)
     PATH_INFO::init_user_dir( "" );
