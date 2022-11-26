@@ -714,7 +714,7 @@ ifeq ($(TILES), 1)
         LDFLAGS += -lSDL2_mixer
       endif
     endif
-  else # not osx
+  else ifneq ($(NATIVE),emscripten)
     CXXFLAGS += $(shell $(PKG_CONFIG) --cflags sdl2 SDL2_image SDL2_ttf)
 
     ifeq ($(STATIC), 1)
