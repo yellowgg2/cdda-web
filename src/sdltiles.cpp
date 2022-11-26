@@ -86,6 +86,10 @@
 #include "worldfactory.h"
 #endif
 
+#if defined(EMSCRIPTEN)
+#include <emscripten.h>
+#endif
+
 #define dbg(x) DebugLog((x),D_SDL) << __FILE__ << ":" << __LINE__ << ": "
 
 //***********************************
@@ -2874,6 +2878,7 @@ static void CheckMessages()
         catacurses::endwin();
         exit( 0 );
     }
+    emscripten_sleep(1);
 }
 
 //***********************************
