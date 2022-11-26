@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <optional>
 
 #include "animation.h"
 #include "creature.h"
@@ -284,7 +285,7 @@ class tileset_loader
          *        Please ensure that the tileset is not accessed when this method is
          *        executing if you set it to true.
          */
-        void load( const std::string &tileset_id, bool precheck, bool pump_events = false );
+        std::optional<std::runtime_error> load( const std::string &tileset_id, bool precheck, bool pump_events = false );
 };
 
 enum class text_alignment : int {
@@ -524,7 +525,7 @@ class cata_tiles
          *        executing if you set it to true.
          * @throw std::exception On any error.
          */
-        void load_tileset( const std::string &tileset_id, bool precheck = false,
+        std::optional<std::runtime_error> load_tileset( const std::string &tileset_id, bool precheck = false,
                            bool force = false, bool pump_events = false );
         /**
          * Reinitializes the current tileset, like @ref init, but using the original screen information.

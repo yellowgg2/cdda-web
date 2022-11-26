@@ -419,9 +419,9 @@ else
 endif
 
 ifeq ($(shell sh -c 'uname -o 2>/dev/null || echo not'),Cygwin)
-  OTHERS += -std=gnu++14
+  OTHERS += -std=gnu++17
 else
-  OTHERS += -std=c++14
+  OTHERS += -std=c++17
 endif
 
 ifeq ($(CYGWIN),1)
@@ -594,9 +594,13 @@ endif
 ifeq ($(NATIVE), emscripten)
   CXX=emcc
   LD=emcc
-  CXXFLAGS += -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_TTF=2
+
+  EMCC_COMMON_FLAGS = -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_TTF=2 -sASYNCIFY
+  CXXFLAGS += $(EMCC_COMMON_FLAGS)
+  LDFLAGS += $(EMCC_COMMON_FLAGS)
+
   LDFLAGS += --preload-file data
-  LDFLAGS += -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_TTF=2 --bind -sALLOW_MEMORY_GROWTH -sEXPORTED_RUNTIME_METHODS=['FS']
+  LDFLAGS += --bind -sALLOW_MEMORY_GROWTH -sEXPORTED_RUNTIME_METHODS=['FS','stackTrace','jsStackTrace']
 endif
 
 # MXE cross-compile to win32

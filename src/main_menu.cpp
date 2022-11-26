@@ -443,6 +443,8 @@ void main_menu::load_char_templates()
     std::reverse( templates.begin(), templates.end() );
 }
 
+#include <emscripten.h>
+
 bool main_menu::opening_screen()
 {
     // set holiday based on local system time
@@ -566,6 +568,7 @@ bool main_menu::opening_screen()
 
     while( !start ) {
         ui_manager::redraw();
+        emscripten_sleep(100);
 
         if( layer == 1 ) {
             std::string action = ctxt.handle_input();
