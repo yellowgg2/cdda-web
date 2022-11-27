@@ -614,6 +614,7 @@ ifeq ($(NATIVE), emscripten)
   LDFLAGS += -sASYNCIFY_STACK_SIZE=16384
   LDFLAGS += -sENVIRONMENT=web
   LDFLAGS += -lidbfs.js
+  LDFLAGS += --pre-js pre.js
 endif
 
 # MXE cross-compile to win32
