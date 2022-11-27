@@ -970,7 +970,7 @@ ifeq ($(RELEASE), 1)
   endif
 endif
 
-cataclysm-tiles.html: $(OBJS)
+cataclysm-tiles.js: $(OBJS)
 	+$(LD) $(W32FLAGS) -o cataclysm-tiles.html $(OBJS) $(LDFLAGS)
 
 $(PCH_P): $(PCH_H)
