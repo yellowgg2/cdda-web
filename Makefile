@@ -613,6 +613,7 @@ ifeq ($(NATIVE), emscripten)
   LDFLAGS += --bind -sALLOW_MEMORY_GROWTH -sEXPORTED_RUNTIME_METHODS=['FS','stackTrace','jsStackTrace']
   LDFLAGS += -sASYNCIFY_STACK_SIZE=16384
   LDFLAGS += -sENVIRONMENT=web
+  LDFLAGS += -lidbfs.js
 endif
 
 # MXE cross-compile to win32

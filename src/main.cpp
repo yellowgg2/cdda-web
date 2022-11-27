@@ -44,6 +44,8 @@
 #include "type_id.h"
 #include "ui_manager.h"
 
+#include <emscripten.h>
+
 class ui_adaptor;
 
 #if defined(TILES)
@@ -508,6 +510,21 @@ cli_opts parse_commandline( int argc, const char **argv )
 
 }  // namespace
 
+EM_ASYNC_JS(void, mount_idbfs, (), {
+    console.log("Mounting IDBFS for persistance.");
+    FS.mkdir('/usersave');
+    FS.mount(IDBFS, {}, '/usersave');
+    await new Promise(function (resolve, reject) {
+        FS.syncfs(true, function (err) {
+            if (err) reject(err);
+            else {
+                console.log("Succesfully mounted IDBFS.");
+                resolve();
+            }
+        });
+    })
+});
+
 #if defined(USE_WINMAIN)
 int APIENTRY WinMain( HINSTANCE /* hInstance */, HINSTANCE /* hPrevInstance */,
                       LPSTR /* lpCmdLine */, int /* nCmdShow */ )
@@ -521,6 +538,8 @@ int main( int argc, const char *argv[] )
 {
 #endif
     init_crash_handlers();
+    
+    mount_idbfs();
 
 #if defined(__ANDROID__)
     // Start the standard output logging redirector
