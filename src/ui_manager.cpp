@@ -10,6 +10,10 @@
 #include "point.h"
 #include "sdltiles.h" // IWYU pragma: keep
 
+#if defined(EMSCRIPTEN)
+#include <emscripten.h>
+#endif
+
 using ui_stack_t = std::vector<std::reference_wrapper<ui_adaptor>>;
 
 static ui_stack_t ui_stack;
@@ -285,6 +289,7 @@ void ui_adaptor::redraw_invalidated()
             }
         }
     }
+    emscripten_sleep(1);
 }
 
 void ui_adaptor::screen_resized()

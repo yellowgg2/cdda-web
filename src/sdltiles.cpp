@@ -2878,7 +2878,6 @@ static void CheckMessages()
         catacurses::endwin();
         exit( 0 );
     }
-    emscripten_sleep(1);
 }
 
 //***********************************

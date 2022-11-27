@@ -347,6 +347,8 @@ ifeq ($(RELEASE), 1)
     else
       OPTLEVEL = -O3
     endif
+  else ifeq ($(NATIVE), emscripten)
+    OPTLEVEL = -O3
   else
     # MXE ICE Workaround
     # known bad on 4.9.3 and 4.9.4, if it gets fixed this could include a version test too
@@ -409,7 +411,9 @@ else
     # way to turn off optimization (make NOOPT=1) entirely.
     OPTLEVEL = -O0
   else
-    ifeq ($(shell $(CXX) -E -Og - < /dev/null > /dev/null 2>&1 && echo fog),fog)
+    ifeq ($(NATIVE),emscripten)
+      OPTLEVEL = -O3
+    else ifeq ($(shell $(CXX) -E -Og - < /dev/null > /dev/null 2>&1 && echo fog),fog)
       OPTLEVEL = -Og
     else
       OPTLEVEL = -O0
@@ -597,12 +601,17 @@ ifeq ($(NATIVE), emscripten)
 
   # Flags that are common across compile and link phases.
   EMCC_COMMON_FLAGS = -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_TTF=2 -sASYNCIFY -sSDL2_IMAGE_FORMATS=['png']
+  
+  ifneq ($(RELEASE), 1)
+    EMCC_COMMON_FLAGS += -g
+  endif
+  
   CXXFLAGS += $(EMCC_COMMON_FLAGS)
   LDFLAGS += $(EMCC_COMMON_FLAGS)
 
   LDFLAGS += --preload-file data --preload-file gfx
   LDFLAGS += --bind -sALLOW_MEMORY_GROWTH -sEXPORTED_RUNTIME_METHODS=['FS','stackTrace','jsStackTrace']
-  LDFLAGS += -sASYNCIFY_STACK_SIZE=8192
+  LDFLAGS += -sASYNCIFY_STACK_SIZE=16384
   LDFLAGS += -sENVIRONMENT=web
 endif
 
@@ -961,13 +970,6 @@ endif
 
 cataclysm-tiles.html: $(OBJS)
 	+$(LD) $(W32FLAGS) -o cataclysm-tiles.html $(OBJS) $(LDFLAGS)
-ifeq ($(RELEASE), 1)
-  ifndef DEBUG_SYMBOLS
-    ifneq ($(BACKTRACE),1)
-	$(STRIP) $(TARGET)
-    endif
-  endif
-endif
 
 $(PCH_P): $(PCH_H)
 	-$(CXX) $(CPPFLAGS) $(DEFINES) $(subst -Werror,,$(CXXFLAGS)) -c $(PCH_H) -o $(PCH_P)
