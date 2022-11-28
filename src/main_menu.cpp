@@ -359,7 +359,9 @@ void main_menu::init_strings()
     vMenuItems.push_back( pgettext( "Main Menu", "Se<t|T>tings" ) );
     vMenuItems.push_back( pgettext( "Main Menu", "H<e|E|?>lp" ) );
     vMenuItems.push_back( pgettext( "Main Menu", "<C|c>redits" ) );
+#if !defined (EMSCRIPTEN)
     vMenuItems.push_back( pgettext( "Main Menu", "<Q|q>uit" ) );
+#endif
 
     // determine hotkeys from translated menu item text
     vMenuHotkeys.clear();
@@ -583,21 +585,23 @@ bool main_menu::opening_screen()
             }
             // also check special keys
             if( action == "QUIT" ) {
+#if !defined (EMSCRIPTEN)
                 if( query_yn( _( "Really quit?" ) ) ) {
                     sel1 = 8;
                     action = "CONFIRM";
                 }
+#endif
             } else if( action == "LEFT" || action == "PREV_TAB" ) {
                 sel_line = 0;
                 if( sel1 > 0 ) {
                     sel1--;
                 } else {
-                    sel1 = 8;
+                    sel1 = 7;
                 }
                 on_move();
             } else if( action == "RIGHT" || action == "NEXT_TAB" ) {
                 sel_line = 0;
-                if( sel1 < 8 ) {
+                if( sel1 < 7 ) {
                     sel1++;
                 } else {
                     sel1 = 0;
@@ -618,7 +622,9 @@ bool main_menu::opening_screen()
                 if( sel1 == 6 ) {
                     get_help().display_help();
                 } else if( sel1 == 8 ) {
+#if !defined (EMSCRIPTEN)
                     return false;
+#endif
                 } else {
                     sel2 = 0;
                     layer = 2;
