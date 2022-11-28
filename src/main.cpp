@@ -44,8 +44,6 @@
 #include "type_id.h"
 #include "ui_manager.h"
 
-#include <emscripten.h>
-
 class ui_adaptor;
 
 #if defined(TILES)
@@ -510,10 +508,12 @@ cli_opts parse_commandline( int argc, const char **argv )
 
 }  // namespace
 
+#include <emscripten.h>
+
 EM_ASYNC_JS(void, mount_idbfs, (), {
-    console.log("Mounting IDBFS for persistance.");
-    FS.mkdir('/usersave');
-    FS.mount(IDBFS, {}, '/usersave');
+    console.log("Mounting IDBFS for persistance...");
+    FS.mkdir('/home/web_user/.cataclysm-dda');
+    FS.mount(IDBFS, {}, '/home/web_user/.cataclysm-dda');
     await new Promise(function (resolve, reject) {
         FS.syncfs(true, function (err) {
             if (err) reject(err);
@@ -522,7 +522,31 @@ EM_ASYNC_JS(void, mount_idbfs, (), {
                 resolve();
             }
         });
-    })
+    });
+
+    window.idb_is_syncing = false;
+    function syncIDB() {
+        console.log("Persisting to IDBFS...");
+        window.idb_is_syncing = true;
+        FS.syncfs(false, function (err) {
+            window.idb_is_syncing = false;
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("Succesfully persisted to IDBFS...");
+            }
+        });
+    }
+
+    window.idb_needs_sync = false;
+    function checkIDB() {
+        if (window.idb_needs_sync && !window.idb_is_syncing) {
+            window.idb_needs_sync = false;
+            syncIDB();
+        }
+        window.requestAnimationFrame(checkIDB);
+    }
+    window.requestAnimationFrame(checkIDB);
 });
 
 #if defined(USE_WINMAIN)
@@ -566,10 +590,8 @@ int main( int argc, const char *argv[] )
 
 #if defined(__ANDROID__)
     PATH_INFO::init_user_dir( external_storage_path );
-#elif defined(EMSCRIPTEN)
-    PATH_INFO::init_user_dir("/user");
 #else
-#   if defined(USE_HOME_DIR) || defined(USE_XDG_DIR)
+#   if defined(USE_HOME_DIR) || defined(USE_XDG_DIR) || defined(EMSCRIPTEN)
     PATH_INFO::init_user_dir( "" );
 #   else
     PATH_INFO::init_user_dir( "./" );

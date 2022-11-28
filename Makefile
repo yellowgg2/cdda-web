@@ -618,9 +618,12 @@ ifeq ($(NATIVE), emscripten)
   LDFLAGS += -sWASM_BIGINT # Browser will require BigInt support.
 
   ifeq ($(RELEASE), 1)
+    # Release-mode Linker flags.
     LDFLAGS += -Os
   else
-    LDFLAGS += -O1
+    # Debug mode linker flags.
+    LDFLAGS += -O1 # Emscripten link time is slow, so use low optimization level.
+    LDFLAGS += -sFS_DEBUG
   endif
 endif
 

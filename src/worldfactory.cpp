@@ -347,7 +347,7 @@ void worldfactory::init()
             for( auto &origin_file : get_files_from_path( ".", origin_path, false ) ) {
                 std::string filename = origin_file.substr( origin_file.find_last_of( "/\\" ) );
 
-                rename( origin_file.c_str(), ( newworld->folder_path() + filename ).c_str() );
+                rename_file( origin_file.c_str(), ( newworld->folder_path() + filename ).c_str() );
             }
             newworld->world_saves = old_world.world_saves;
             newworld->WORLD_OPTIONS = old_world.WORLD_OPTIONS;

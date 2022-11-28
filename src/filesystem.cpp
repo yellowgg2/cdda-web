@@ -33,6 +33,8 @@
 #   include "platform_win.h"
 #endif
 
+#include <emscripten.h>
+
 namespace
 {
 
@@ -48,6 +50,7 @@ bool do_mkdir( const std::string &path, const int /*mode*/ )
 #else
 bool do_mkdir( const std::string &path, const int mode )
 {
+    EM_ASM(window.idb_needs_sync = true;);
     return mkdir( path.c_str(), mode ) == 0;
 }
 #endif
@@ -83,6 +86,7 @@ bool remove_file( const std::string &path )
 #else
 bool remove_file( const std::string &path )
 {
+    EM_ASM(window.idb_needs_sync = true;);
     return unlink( path.c_str() ) == 0;
 }
 #endif
@@ -103,6 +107,7 @@ bool rename_file( const std::string &old_path, const std::string &new_path )
 #else
 bool rename_file( const std::string &old_path, const std::string &new_path )
 {
+    EM_ASM(window.idb_needs_sync = true;);
     return rename( old_path.c_str(), new_path.c_str() ) == 0;
 }
 #endif
@@ -112,6 +117,7 @@ bool remove_directory( const std::string &path )
 #if defined(_WIN32)
     return RemoveDirectory( path.c_str() );
 #else
+    EM_ASM(window.idb_needs_sync = true;);
     return remove( path.c_str() ) == 0;
 #endif
 }
