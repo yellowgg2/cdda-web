@@ -1386,6 +1386,11 @@ void resize_term( const int cell_w, const int cell_h )
 
 void toggle_fullscreen_window()
 {
+    // Can't enter fullscreen on Emscripten.
+#if defined(EMSCRIPTEN)
+    return;
+#endif
+
     static int restore_win_w = get_option<int>( "TERMINAL_X" ) * fontwidth * scaling_factor;
     static int restore_win_h = get_option<int>( "TERMINAL_Y" ) * fontheight * scaling_factor;
 
