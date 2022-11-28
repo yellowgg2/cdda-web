@@ -15,12 +15,22 @@
         border: 0px none;
         background-color: black;
       }
+
+      #loading-message {
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 30px;
+        transform: translate(-50%, -50%);
+      }
     </style>
   </head>
   <body>
 
     
     <canvas id="canvas" style="width: 960px; height: 540px;" tabindex=-1></canvas>
+    <div id="loading-message">Loading...</div>
 
     <script type='text/javascript'>
       var Module = {
@@ -37,7 +47,12 @@
           return canvas;
         })(),
         setStatus: function(text) {
-          console.log(text)
+          if (text) {
+            console.log(text);
+            document.getElementById("loading-message").innerHTML = text;
+          } else {
+            document.getElementById("loading-message").style.display = "none";
+          }
         },
         totalDependencies: 0,
         monitorRunDependencies: function(left) {
