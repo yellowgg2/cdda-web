@@ -348,7 +348,7 @@ ifeq ($(RELEASE), 1)
       OPTLEVEL = -O3
     endif
   else ifeq ($(NATIVE), emscripten)
-    OPTLEVEL = -O3
+    OPTLEVEL = -Os
   else
     # MXE ICE Workaround
     # known bad on 4.9.3 and 4.9.4, if it gets fixed this could include a version test too
@@ -615,6 +615,13 @@ ifeq ($(NATIVE), emscripten)
   LDFLAGS += -sENVIRONMENT=web
   LDFLAGS += -lidbfs.js
   LDFLAGS += --pre-js pre.js
+  LDFLAGS += -sWASM_BIGINT # Browser will require BigInt support.
+
+  ifeq ($(RELEASE), 1)
+    LDFLAGS += -Os
+  else
+    LDFLAGS += -O1
+  endif
 endif
 
 # MXE cross-compile to win32
