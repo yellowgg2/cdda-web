@@ -609,7 +609,7 @@ ifeq ($(NATIVE), emscripten)
   CXXFLAGS += $(EMCC_COMMON_FLAGS)
   LDFLAGS += $(EMCC_COMMON_FLAGS)
 
-  LDFLAGS += --preload-file data --preload-file gfx
+  LDFLAGS += --preload-file web_bundle@/
   LDFLAGS += --bind -sALLOW_MEMORY_GROWTH -sEXPORTED_RUNTIME_METHODS=['FS','stackTrace','jsStackTrace']
   LDFLAGS += -sASYNCIFY_STACK_SIZE=16384
   LDFLAGS += -sENVIRONMENT=web
