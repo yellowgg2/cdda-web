@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1, viewport-fit=cover, maximum-scale=1">
     <title>Cataclysm: DDA</title>
     <style>
+      @font-face {
+          font-family: Terminus;
+          src: url("./Terminus.ttf");
+      }
+
       html {
         padding: 0;
         margin: 0;
@@ -45,7 +50,7 @@
         font-size: 30px;
         transform: translate(-50%, -50%);
         text-align: center;
-        font-family: monospace;
+        font-family: Terminus, monospace;
       }
 
       #settings-gear {
@@ -65,10 +70,29 @@
 
       #settings-menu {
         color: white;
+        background-color: black;
         z-index: 3;
         position: absolute;
-        top: 10px;
+        top: 40px;
         left: 10px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 5px;
+        padding: 15px;
+        align-items: stretch;
+        border-color: white;
+        border-style: solid;
+      }
+
+      .menu-button {
+        font-family: Terminus, monospace;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0.7;
+      }
+
+      .menu-button:hover {
+        opacity: 1.0;
       }
     </style>
 
@@ -82,9 +106,9 @@
   <body>
 
     <div id="settings-gear"><i class="fa-solid fa-gear"></i></div>
-    <div id="settings-menu">
-      <button id="toggle-fullscreen">Toggle Fullscreen</button>
-      <button id="export-saves">Export Saves</button>
+    <div id="settings-menu" style="display: none;">
+      <div style="margin-bottom: 10px;"><div id="toggle-fullscreen" class="menu-button"><i class="fa-solid fa-expand"></i><span style="margin-left: 0.7em;">Toggle Fullscreen</span></div></div>
+      <div><div id="export-saves" class="menu-button"><i class="fa-solid fa-download"></i><span style="margin-left: 0.7em;">Export Saves</span></div></div>
     </div>
     
     <canvas id="canvas" style="width: 100%; height: 100%; min-width: 640px; min-height: 384px;" tabindex=-1></canvas>
@@ -92,6 +116,20 @@
 
     <script type='text/javascript'>
       let canvas = document.getElementById('canvas');
+
+      let settingsMenu = document.getElementById("settings-menu");
+      document.getElementById("settings-gear").onclick = () => {
+        if (settingsMenu.style.display === "none") {
+          settingsMenu.style.display = "inherit";
+        } else {
+          settingsMenu.style.display = "none";
+        }
+      }
+
+      canvas.addEventListener("click", () => {
+        settingsMenu.style.display = "none";
+      });
+
 
       document.getElementById("toggle-fullscreen").onclick = () => {
         screenfull.toggle();
