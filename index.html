@@ -95,11 +95,15 @@
       .menu-button:hover {
         opacity: 1.0;
       }
+
+      a {
+        color: white;
+        text-decoration: none;
+      }
     </style>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/fontawesome.min.css" integrity="sha512-giQeaPns4lQTBMRpOOHsYnGw1tGVzbAIHUyHRgn7+6FmiEgGGjaG0T2LZJmAPMzRCl+Cug0ItQ2xDZpTmEc+CQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/solid.min.css" integrity="sha512-6mc0R607di/biCutMUtU9K7NtNewiGQzrvWX4bWTeqmljZdJrwYvKJtnhgR+Ryvj+NRJ8+NnnCM/biGqMe/iRA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/5.2.0/screenfull.min.js" integrity="sha512-GoG2/bE6QSPKSrjuoII6iPL2ODnwUJvFgysFYLTW2ltpx6G5nj+mYvhPq5rLPZby0rdMFU2fo4BMlWND7+QZ5g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -109,7 +113,11 @@
     <div id="settings-gear"><i class="fa-solid fa-gear"></i></div>
     <div id="settings-menu" style="display: none;">
       <div style="margin-bottom: 10px;"><div id="toggle-fullscreen" class="menu-button"><i class="fa-solid fa-expand"></i><span style="margin-left: 0.7em;">Toggle Fullscreen</span></div></div>
-      <div><div id="export-saves" class="menu-button"><i class="fa-solid fa-download"></i><span style="margin-left: 0.7em;">Export Saves</span></div></div>
+      <div style="margin-bottom: 10px;"><div id="export-saves" class="menu-button"><i class="fa-solid fa-download"></i><span style="margin-left: 0.7em;">Export Saves</span></div></div>
+      <div>
+        <a target="_blank" href="https://github.com/rameshvarun/cdda-web">
+          <div id="browse-code" class="menu-button"><i class="fa-brands fa-github"></i><span style="margin-left: 0.7em;">Browse Code</span></div></div>
+        </a>
     </div>
     
     <canvas id="canvas" style="width: 100%; height: 100%; min-width: 640px; min-height: 384px;" tabindex=-1></canvas>
