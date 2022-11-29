@@ -620,6 +620,7 @@ ifeq ($(NATIVE), emscripten)
   ifeq ($(RELEASE), 1)
     # Release-mode Linker flags.
     LDFLAGS += -Os
+    LDFLAGS += -sLZ4
   else
     # Debug mode linker flags.
     LDFLAGS += -O1 # Emscripten link time is slow, so use low optimization level.

@@ -51,6 +51,7 @@
         transform: translate(-50%, -50%);
         text-align: center;
         font-family: Terminus, monospace;
+        z-index: 4;
       }
 
       #settings-gear {
@@ -116,8 +117,13 @@
 
     <script type='text/javascript'>
       let canvas = document.getElementById('canvas');
-
+      let loadingMessage = document.getElementById("loading-message");
       let settingsMenu = document.getElementById("settings-menu");
+
+      window.addEventListener("menuready", () => {
+        loadingMessage.style.display = "none";
+      });
+
       document.getElementById("settings-gear").onclick = () => {
         if (settingsMenu.style.display === "none") {
           settingsMenu.style.display = "inherit";
@@ -177,9 +183,9 @@
         })(),
         setStatus: function(text) {
           if (text) {
-            document.getElementById("loading-message").innerHTML = text;
+            loadingMessage.innerHTML = text;
           } else {
-            document.getElementById("loading-message").style.display = "none";
+            loadingMessage.innerHTML = "Starting...";
           }
         },
         totalDependencies: 0,

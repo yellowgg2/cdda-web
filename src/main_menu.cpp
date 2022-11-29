@@ -46,6 +46,8 @@
 #include "wcwidth.h"
 #include "worldfactory.h"
 
+#include <emscripten.h>
+
 void main_menu::on_move() const
 {
     sfx::play_variant_sound( "menu_move", "default", 100 );
@@ -565,6 +567,8 @@ bool main_menu::opening_screen()
         ui.position_from_window( w_open );
     } );
     ui.mark_resize();
+
+    EM_ASM(window.dispatchEvent(new Event('menuready')););
 
     while( !start ) {
         ui_manager::redraw();
